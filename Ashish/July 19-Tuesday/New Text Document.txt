@@ -1,0 +1,76 @@
+localhost:4200
+
+sudo su
+su root
+
+yum-config-manager --save --setopt=HDP-SOLR-2.6-100.skip_if_unavailable=true 
+yum install https://repo.ius.io/ius-release-el7.rpm https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+
+yum install python-pip
+pip install pathlib
+pip install mrjob==0.7.4
+pip install PyYAML==5.4.1
+yum install nano
+
+sudo apt install python3-pip
+
+wget 'link'
+nano Ramya_insurance.py -> gives you nano editor
+
+
+COMMAND:nano insurance.csv
+
+from mrjob.job import MRJob
+class avg(MRJob):
+    def mapper(self,key,value):
+        (age,gender,bmi,children,smoker,region,charges)=value.split(',')
+
+        yield age, float(charges)
+    def reducer(self,age,charges):
+        total=0
+        num=0
+        for i in charges:
+            total+=i
+            num+=1
+        yield age,total/num
+        
+avg.run()
+
+COMMAND: python insurance.py insurance.csv
+        
+FIND THE AVG OF CHARGES FOR EACH AGE , IS HE IS A SMOKER:
+
+COMMAND:nano ins_smoker.py 
+THIS CREATES A .py filw with nameins_smoker.py
+
+
+from mrjob.job import MRJob
+class avg_smoker(MRJob):
+    def mapper(self,key,value):
+        (age,gender,bmi,children,smoker,region,charges)=value.split(',')
+         if smoker==yes:
+                
+                yield age, float(charges)
+    def reducer(self,age,charges):
+        total=0
+        num=0
+        for i in charges:
+            total+=i
+            num+=1
+            yield age, total/num
+avg_smoker.run()
+
+COMMANDS:
+python insurance.py insurance.csv
+THIS RUNS THE .PY FILE ALONG WITH THIS CSV FILE AS INPUT
+python ins_smoker.py insurance.csv
+
+python ins_smoker.py insurance.csv > result.txt
+
+python insurance.py -r hadoop --hadoop-streaming-jar /usr/hdp/current/hadoop-mapreduce-client/hadoop-streaming.jar insurance12.csv
+
+python insurance.py -r hadoop --hadoop-streaming-jar insurance.csv
+
+
+python insurance.py -r hadoop --hadoop-streaming-jar /usr/hdp/current/hadoop-mapreduce-client/hadoop-streaming.jar insurance12.csv
+

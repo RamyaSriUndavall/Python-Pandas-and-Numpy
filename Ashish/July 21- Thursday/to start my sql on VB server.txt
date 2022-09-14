@@ -1,0 +1,17 @@
+mysql -u root -p
+password: hadoop
+
+su root
+systemctl stop mysqld
+systemctl set-environment MYSQLD_OPTS="--skip-grant-tables --skip-networking"
+systemctl start mysqld
+mysql -uroot
+FLUSH PRIVILEGES;
+alter user 'root'@'localhost' IDENTIFIED BY 'hadoop';
+FLUSH PRIVILEGES;
+QUIT;
+
+systemctl unset-environment MYSQLD_OPTS
+systemctl restart mysqld
+
+sqoop import --connect jdbc:mysql://localhost:3306/NewDB --driver com.mysql.jdbc.Driver --table bankdata -m1 --username root --password hadoop

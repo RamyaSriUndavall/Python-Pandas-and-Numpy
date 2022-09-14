@@ -1,0 +1,1 @@
+select age from insurance limit 10;
